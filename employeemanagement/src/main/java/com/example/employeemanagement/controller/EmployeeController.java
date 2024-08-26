@@ -10,11 +10,8 @@ import com.example.employeemanagement.model.Employee;
 import com.example.employeemanagement.model.Role;
 import com.example.employeemanagement.service.EmployeeService;
 
-
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,15 +21,25 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
+
+
     @Autowired
     private EmployeeService employeeService;
     @Autowired
     private EmployeeMapper employeeMapper;
 
+
+
     @GetMapping
     public List<EmployeeDTO> getAllEmployees() {
         return employeeMapper.toEmployeeDTO(employeeService.getAllEmployees());
     }
+
+    @GetMapping("/{id}")
+    public EmployeeDTO getEmployeeById(@PathVariable Long id) {
+        return employeeMapper.toEmployeeDTO(employeeService.findEmployeeById(id));
+    }
+
 
 
     @PostMapping
@@ -44,6 +51,7 @@ public class EmployeeController {
             employeeService.createEmployee(employee);
         }
     }
+
 
     @DeleteMapping("/{id}")
     public void deleteEmployeeById(@PathVariable Long id) {
@@ -70,10 +78,12 @@ public class EmployeeController {
     public Integer getEmployeeRoleCount(@Valid @RequestParam("role") String role) {
         return employeeService.findNumberOfEmployeeForEachRole(role);
     }
-    @GetMapping("/{age}")
+
+    /* @GetMapping("/{age}")
     public List<EmployeeDTO> findEmployeeByAgeGreaterThan(@PathVariable Integer age) {
         return employeeMapper.toEmployeeDTO(employeeService.findEmployeeByAgeGreaterThan(age));
-    }
+    }*/
+
     @GetMapping("/role-id")
     public @ResponseBody List<Map<Long, Role>> findRoleForEveryEmployeeId() {
         return employeeService.findRoleForEveryEmployeeId();
@@ -83,11 +93,6 @@ public class EmployeeController {
 
 
 
-/*
-    @GetMapping("/{id}")
-    public EmployeeDTO getEmployeeById(@PathVariable Long id) {
-        return employeeMapper.toEmployeeDTO(employeeService.findEmployeeById(id));
-    }*/
 
 
 
