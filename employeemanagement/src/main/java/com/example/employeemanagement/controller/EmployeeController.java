@@ -8,12 +8,14 @@ import com.example.employeemanagement.mapper.EmployeeMapper;
 import com.example.employeemanagement.controller.dto.EmployeeDTO;
 import com.example.employeemanagement.model.Employee;
 import com.example.employeemanagement.model.Role;
+import com.example.employeemanagement.projections.EmployeeProjections;
 import com.example.employeemanagement.service.EmployeeService;
 import com.example.employeemanagement.specification.EmployeeSpecification;
 import com.example.employeemanagement.specification.dto.EmployeeSearch;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,16 +39,22 @@ public class EmployeeController {
 
 
     @GetMapping
-    public List<EmployeeDTO> getAllEmployees(
-            EmployeeSearch employeeSearch
-    ) {
-        return employeeMapper.toEmployeeDTO(employeeService.getAllEmployees(employeeSearch));
+    public ResponseEntity<?> getAllEmployees(
+            EmployeeSearch employeeSearch ,
+            @RequestParam(value = "pageNo" , defaultValue = "-1",required = false) int pageNo,
+            @RequestParam(value = "pageSize" , defaultValue = "-1",required = false) int pageSize)
+    {
+        return employeeService.getAllEmployees(employeeSearch, pageNo, pageSize);
     }
 
 
     @GetMapping("/{id}")
     public EmployeeDTO getEmployeeById(@PathVariable Long id) {
         return employeeMapper.toEmployeeDTO(employeeService.findEmployeeById(id));
+    }
+    @GetMapping("//")
+    public List<EmployeeProjections> getEmployees(){
+        return employeeService.findAllEmployeesBySomeAttributes();
     }
 
 

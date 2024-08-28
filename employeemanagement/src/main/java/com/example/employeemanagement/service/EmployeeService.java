@@ -3,15 +3,20 @@ package com.example.employeemanagement.service;
 import com.example.employeemanagement.Convertor.DateOfBirthConvertor;
 import com.example.employeemanagement.exception.Code;
 import com.example.employeemanagement.exception.EmployeeNotFoundException;
+import com.example.employeemanagement.mapper.EmployeeMapper;
 import com.example.employeemanagement.model.Employee;
 import com.example.employeemanagement.model.Role;
+import com.example.employeemanagement.projections.EmployeeProjections;
 import com.example.employeemanagement.repository.CustomEmployeeRepository;
 import com.example.employeemanagement.repository.EmployeeRepository;
 import com.example.employeemanagement.specification.EmployeeSpecification;
 import com.example.employeemanagement.specification.dto.EmployeeSearch;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -33,15 +38,34 @@ public class EmployeeService {
     private EmployeeRepository employeeRepository;
     @Autowired
     private CustomEmployeeRepository customEmployeeRepository;
+    @Autowired
+    private EmployeeMapper employeeMapper;
 
 
-    public List<Employee> getAllEmployees(EmployeeSearch employeeSearch) {
-        List<Employee> employees = employeeRepository.findAll(new EmployeeSpecification(employeeSearch));
-        if (employees.isEmpty()) {
-            throw new EmployeeNotFoundException("There are no employees",Code.EMPTYEMPLOYEELIST);
+    public ResponseEntity<?> getAllEmployees(EmployeeSearch employeeSearch, int pageNo, int pageSize) {
+
+        ResponseEntity<?> response;
+
+
+        if( (pageNo < 0) && (pageSize < 0))
+            response=ResponseEntity.ok(employeeRepository.findAll(new EmployeeSpecification(employeeSearch)));
+        else
+            response = ResponseEntity.ok(employeeRepository.findAll(new EmployeeSpecification(employeeSearch),PageRequest.of(pageNo, pageSize)));
+
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            return response;
         }
-          return employees;
+        throw new EmployeeNotFoundException("There are no employees",Code.EMPTYEMPLOYEELIST);
+
     }
+
+    public List<EmployeeProjections> findAllEmployeesBySomeAttributes() {
+     return employeeRepository.findAllEmployeesBySomeAttributes();
+    }
+
+
+
 
     public Employee findEmployeeById(Long id) {
         List<Employee> employee = customEmployeeRepository.getEmployeeById(id);
@@ -69,6 +93,8 @@ public class EmployeeService {
             employee.setId(id);
             employeeRepository.save(employee);
     }
+
+
 
 
 
