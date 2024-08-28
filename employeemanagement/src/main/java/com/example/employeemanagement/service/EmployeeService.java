@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -45,18 +46,23 @@ public class EmployeeService {
     public ResponseEntity<?> getAllEmployees(EmployeeSearch employeeSearch, int pageNo, int pageSize) {
 
         ResponseEntity<?> response;
+        List<Employee> employees ;
+        Page<Employee> employeesPage ;
 
 
-        if( (pageNo < 0) && (pageSize < 0))
-            response=ResponseEntity.ok(employeeRepository.findAll(new EmployeeSpecification(employeeSearch)));
-        else
-            response = ResponseEntity.ok(employeeRepository.findAll(new EmployeeSpecification(employeeSearch),PageRequest.of(pageNo, pageSize)));
-
-
-        if (response.getStatusCode().is2xxSuccessful()) {
-            return response;
+        if( (pageNo < 0) && (pageSize < 0)) {
+            employees = employeeRepository.findAll(new EmployeeSpecification(employeeSearch));
+            if (employees.isEmpty())
+                throw new EmployeeNotFoundException("There are no employees",Code.EMPTYEMPLOYEELIST);
+            return ResponseEntity.ok(employees);
         }
-        throw new EmployeeNotFoundException("There are no employees",Code.EMPTYEMPLOYEELIST);
+        else {
+            employeesPage = employeeRepository.findAll(new EmployeeSpecification(employeeSearch), PageRequest.of(pageNo, pageSize));
+            if (!employeesPage.hasContent())
+                throw new EmployeeNotFoundException("There are no employees22",Code.EMPTYEMPLOYEELIST);
+            return ResponseEntity.ok(employeesPage);
+        }
+
 
     }
 
