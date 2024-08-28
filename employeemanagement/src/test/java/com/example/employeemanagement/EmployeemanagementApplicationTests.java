@@ -1,40 +1,34 @@
 package com.example.employeemanagement;
 
-import com.example.employeemanagement.model.Employee;
+import com.example.employeemanagement.controller.request.CreatedEmployeeRequest;
 import com.example.employeemanagement.repository.EmployeeRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.sql.Date;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.Temporal;
-import java.util.List;
+import java.util.Objects;
 
 @SpringBootTest
 class EmployeemanagementApplicationTests {
      @Autowired
      EmployeeRepository employeeRepository;
+     @Autowired
+     HttpServletRequest request;
     @Test
     void contextLoads() {
-        List<Employee> employees = employeeRepository.findAll();
 
 
-        employees.stream().forEach(employee -> {
-            Date date = Date.valueOf(LocalDate.now());
-            Date date2 = employee.getDateOfBirth();
 
-            Date date3 = new Date(date.getYear(), date.getMonth(), date.getDate());
-            Date date4 = new Date(date2.getYear(), date2.getMonth(), date2.getDate());
+        CreatedEmployeeRequest createdEmployeeRequest=null;
 
-            LocalDate date5 = date3.toLocalDate();
-            LocalDate date6 = date4.toLocalDate();
+        if (Objects.isNull(createdEmployeeRequest)) {
+                System.out.println("Create Employee Request"+request.getRequestURI() );
+        }
 
-            LocalDate date7 = date5.minusYears(date6.getYear());
-            Integer age = date7.getYear();
-        });
+
+
+
 
 
     }

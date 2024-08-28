@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Mapper(componentModel="spring")
-@Component
 public interface EmployeeMapper {
 
 

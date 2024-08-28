@@ -2,9 +2,7 @@ package com.example.employeemanagement.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
 import java.sql.Date;
 
 @Entity
@@ -13,6 +11,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+
 public class Employee {
 
      @Id

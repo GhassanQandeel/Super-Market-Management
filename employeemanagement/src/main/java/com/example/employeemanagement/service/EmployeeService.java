@@ -1,13 +1,14 @@
 package com.example.employeemanagement.service;
 
 import com.example.employeemanagement.Convertor.DateOfBirthConvertor;
-import com.example.employeemanagement.exception.EmptyListException;
-import com.example.employeemanagement.exception.EmptyObjectException;
-import com.example.employeemanagement.exception.RecordNotFoundException;
-import com.example.employeemanagement.mapper.EmployeeMapper;
+import com.example.employeemanagement.exception.Code;
+import com.example.employeemanagement.exception.EmployeeNotFoundException;
 import com.example.employeemanagement.model.Employee;
 import com.example.employeemanagement.model.Role;
+import com.example.employeemanagement.repository.CustomEmployeeRepository;
 import com.example.employeemanagement.repository.EmployeeRepository;
+import com.example.employeemanagement.specification.EmployeeSpecification;
+import com.example.employeemanagement.specification.dto.EmployeeSearch;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -19,6 +20,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
+
 @Service
 public class EmployeeService {
 
@@ -29,81 +32,71 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
     @Autowired
-    private EmployeeMapper employeeMapper;
+    private CustomEmployeeRepository customEmployeeRepository;
 
 
-    public List<Employee> getAllEmployees() {
-        List<Employee> employees = employeeRepository.find();
-
-        if (!employees.isEmpty()) {
-            return employees;
+    public List<Employee> getAllEmployees(EmployeeSearch employeeSearch) {
+        List<Employee> employees = employeeRepository.findAll(new EmployeeSpecification(employeeSearch));
+        if (employees.isEmpty()) {
+            throw new EmployeeNotFoundException("There are no employees",Code.EMPTYEMPLOYEELIST);
         }
-        else {
-            throw new EmptyListException("There no Employees");
-        }
-
+          return employees;
     }
 
     public Employee findEmployeeById(Long id) {
-
-        Optional<Employee> employee = employeeRepository.findById(id);
-        if (employee.isPresent()) {
-            return employee.get();
-        }
-        else {
-            throw new RecordNotFoundException("Record with id = "+ id +" is not found");
-        }
+        List<Employee> employee = customEmployeeRepository.getEmployeeById(id);
+        if (employee.isEmpty())
+            throw new  EmployeeNotFoundException("There are no employee with this id :"+id,Code.NOTFOUNDEMPLOYEE);
+        return employee.get(0);
 
     }
-
 
     public void createEmployee(Employee employee) {
-        if (employee == null) {
-            throw new EmptyListException("Employee cannot be null");
-        }
-        employeeRepository.save(employee);
+                employeeRepository.save(employee);
     }
 
-
-
     public void deleteEmployeeById(Long id) {
-         if(employeeRepository.existsById(id)){
-            employeeRepository.deleteById(id);
+         if(!employeeRepository.existsById(id)){
+            throw new  EmployeeNotFoundException("There are no employee with this id : "+id+" to Delete it",Code.NOTFOUNDEMPLOYEE);
          }
-         else {
-             throw new RecordNotFoundException("Record with id = "+ id +" is not found to delete it ");
-         }
-
+         employeeRepository.deleteById(id);
     }
 
     public void updateEmployee(Long id,@NotNull Employee employee) {
-        if (employee==null)
-            throw new EmptyObjectException("Employee cannot be null");
-        else {
+
+            if (!employeeRepository.existsById(id))
+                throw new  EmployeeNotFoundException("There are no employee with this id : "+id+" to Update it",Code.NOTFOUNDEMPLOYEE);
             employee.setId(id);
-            if (employeeRepository.existsById(id))
-                employeeRepository.save(employee);
-            else
-                throw new RecordNotFoundException("Record with id = " + id + " is not found to update it ");
-        }
+            employeeRepository.save(employee);
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
     public List<Employee> findEmployeeByEmail(String email) {
         List<Employee> employee = employeeRepository.findByEmail(email);
-        if (employee!=null){
             return employee;
-        }
-        else
-            throw new EmptyListException("List of emails  is not found");
     }
 
     public List<Employee> findEmployeeByNameAndOrderBy(String name, Sort sort) {
      List<Employee> employee = employeeRepository.findEmployeeByNameAndOrderBy(name,sort.descending());
-        if (employee!=null){
-            return employee;
-        }
-        else
-            throw new EmptyListException("List of names  is not found");
+
+        return employee;
     }
 
     public List<Map<Long, Role>> findRoleForEveryEmployeeId() {
@@ -120,6 +113,7 @@ public class EmployeeService {
 
 
     }
+*/
 
 
 }
