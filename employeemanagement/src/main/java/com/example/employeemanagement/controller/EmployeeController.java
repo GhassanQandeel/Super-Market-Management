@@ -1,35 +1,31 @@
 package com.example.employeemanagement.controller;
 
+import com.example.employeemanagement.Convertor.ToPaginationResponseConvertor;
+import com.example.employeemanagement.controller.dto.PaginatedResponse;
 import com.example.employeemanagement.controller.request.CreatedEmployeeRequest;
-import com.example.employeemanagement.controller.request.EmployeePaginationDetails;
 import com.example.employeemanagement.controller.request.UpdatedEmployeeRequest;
 import com.example.employeemanagement.exception.Code;
 import com.example.employeemanagement.exception.EmployeeManagementException;
 import com.example.employeemanagement.mapper.EmployeeMapper;
 import com.example.employeemanagement.controller.dto.EmployeeDTO;
 import com.example.employeemanagement.model.Employee;
-import com.example.employeemanagement.model.Role;
 import com.example.employeemanagement.projections.EmployeeProjections;
 import com.example.employeemanagement.service.EmployeeService;
-import com.example.employeemanagement.specification.EmployeeSpecification;
 import com.example.employeemanagement.specification.dto.EmployeeSearch;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
-     // Projection, interface-based projection
+    // Projection, interface-based projection
     // JPA Criteria Builder to implement filters
-
-
 
 
     @Autowired
@@ -40,12 +36,12 @@ public class EmployeeController {
 
 
     @GetMapping
-    public ResponseEntity<?> getAllEmployees(
-            EmployeeSearch employeeSearch ,
-            EmployeePaginationDetails employeePaginationDetails
-    )
-    {
-        return employeeService.getAllEmployees(employeeSearch,employeePaginationDetails);
+    public PaginatedResponse<?> getAllEmployees(
+            EmployeeSearch employeeSearch,
+            Pageable pageable
+    ) {
+
+        return ToPaginationResponseConvertor.convertToPaginationResponse((employeeService.getAllEmployees(employeeSearch, pageable)));
     }
 
 
@@ -53,21 +49,20 @@ public class EmployeeController {
     public EmployeeDTO getEmployeeById(@PathVariable Long id) {
         return employeeMapper.toEmployeeDTO(employeeService.findEmployeeById(id));
     }
+
     @GetMapping("//")
-    public List<EmployeeProjections> getEmployees(){
+    public List<EmployeeProjections> getEmployees() {
         return employeeService.findAllEmployeesBySomeAttributes();
     }
 
 
-
     @PostMapping
     public void createEmployee(@RequestBody @Valid CreatedEmployeeRequest createdEmployeeRequest) {
-       if (createdEmployeeRequest == null)
-            throw new EmployeeManagementException("Employee cannot be null",Code.NULLEMPLOYEE);
+        if (createdEmployeeRequest == null)
+            throw new EmployeeManagementException("Employee cannot be null", Code.NULLEMPLOYEE);
 
-       employeeService.createEmployee(employeeMapper.toEmployee(createdEmployeeRequest));
+        employeeService.createEmployee(employeeMapper.toEmployee(createdEmployeeRequest));
     }
-
 
 
     @DeleteMapping("/{id}")
@@ -76,11 +71,11 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public void updateEmployee(@PathVariable Long id,@Valid @RequestBody UpdatedEmployeeRequest updatedEmployeeRequest) {
-         if (updatedEmployeeRequest == null) {
-            throw new EmployeeManagementException("Employee cannot be null",Code.NULLEMPLOYEE);
+    public void updateEmployee(@PathVariable Long id, @Valid @RequestBody UpdatedEmployeeRequest updatedEmployeeRequest) {
+        if (updatedEmployeeRequest == null) {
+            throw new EmployeeManagementException("Employee cannot be null", Code.NULLEMPLOYEE);
         }
-         employeeService.updateEmployee(id,employeeMapper.toEmployee(updatedEmployeeRequest));
+        employeeService.updateEmployee(id, employeeMapper.toEmployee(updatedEmployeeRequest));
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,12 +95,6 @@ public class EmployeeController {
     public @ResponseBody List<Map<Long, Role>> findRoleForEveryEmployeeId() {
         return employeeService.findRoleForEveryEmployeeId();
     }*/
-
-
-
-
-
-
 
 
 }
