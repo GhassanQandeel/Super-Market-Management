@@ -1,6 +1,7 @@
 package com.example.employeemanagement.controller;
 
 import com.example.employeemanagement.controller.request.CreatedEmployeeRequest;
+import com.example.employeemanagement.controller.request.EmployeePaginationDetails;
 import com.example.employeemanagement.controller.request.UpdatedEmployeeRequest;
 import com.example.employeemanagement.exception.Code;
 import com.example.employeemanagement.exception.EmployeeManagementException;
@@ -41,10 +42,10 @@ public class EmployeeController {
     @GetMapping
     public ResponseEntity<?> getAllEmployees(
             EmployeeSearch employeeSearch ,
-            @RequestParam(value = "pageNo" , defaultValue = "-1",required = false) int pageNo,
-            @RequestParam(value = "pageSize" , defaultValue = "-1",required = false) int pageSize)
+            EmployeePaginationDetails employeePaginationDetails
+    )
     {
-        return employeeService.getAllEmployees(employeeSearch, pageNo, pageSize);
+        return employeeService.getAllEmployees(employeeSearch,employeePaginationDetails);
     }
 
 

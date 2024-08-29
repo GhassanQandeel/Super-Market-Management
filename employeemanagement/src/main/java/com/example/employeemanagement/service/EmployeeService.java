@@ -1,6 +1,7 @@
 package com.example.employeemanagement.service;
 
 import com.example.employeemanagement.Convertor.DateOfBirthConvertor;
+import com.example.employeemanagement.controller.request.EmployeePaginationDetails;
 import com.example.employeemanagement.exception.Code;
 import com.example.employeemanagement.exception.EmployeeNotFoundException;
 import com.example.employeemanagement.mapper.EmployeeMapper;
@@ -9,6 +10,7 @@ import com.example.employeemanagement.model.Role;
 import com.example.employeemanagement.projections.EmployeeProjections;
 import com.example.employeemanagement.repository.CustomEmployeeRepository;
 import com.example.employeemanagement.repository.EmployeeRepository;
+import com.example.employeemanagement.service.dto.PaginationEmployeeResponse;
 import com.example.employeemanagement.specification.EmployeeSpecification;
 import com.example.employeemanagement.specification.dto.EmployeeSearch;
 import jakarta.validation.constraints.NotNull;
@@ -20,10 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -43,27 +42,53 @@ public class EmployeeService {
     private EmployeeMapper employeeMapper;
 
 
-    public ResponseEntity<?> getAllEmployees(EmployeeSearch employeeSearch, int pageNo, int pageSize) {
-
-        ResponseEntity<?> response;
-        List<Employee> employees ;
-        Page<Employee> employeesPage ;
+    public ResponseEntity<?> getAllEmployees(EmployeeSearch employeeSearch ,
+                                             EmployeePaginationDetails employeePaginationDetails
+    ) {
 
 
-        if( (pageNo < 0) && (pageSize < 0)) {
+        List<Employee> employees;
+        Page<Employee> employeesPage;
+        PaginationEmployeeResponse paginationEmployeeResponse;
+
+
+
+
+        if( (employeePaginationDetails.getPageSize() < 0) && (employeePaginationDetails.getPageNumber() < 0)) {
             employees = employeeRepository.findAll(new EmployeeSpecification(employeeSearch));
             if (employees.isEmpty())
                 throw new EmployeeNotFoundException("There are no employees",Code.EMPTYEMPLOYEELIST);
             return ResponseEntity.ok(employees);
         }
         else {
-            employeesPage = employeeRepository.findAll(new EmployeeSpecification(employeeSearch), PageRequest.of(pageNo, pageSize));
-            if (!employeesPage.hasContent())
+            employeesPage = employeeRepository.findAll
+                                    (
+                                    new EmployeeSpecification(employeeSearch),
+                                    PageRequest.of
+                                        (
+                                                employeePaginationDetails.getPageNumber(),
+                                                employeePaginationDetails.getPageSize(),
+                                                Sort.Direction.valueOf(employeePaginationDetails.getSort()),
+                                                employeePaginationDetails.getSortDirection()
+                                        )
+                                    );
+            paginationEmployeeResponse =
+                    new PaginationEmployeeResponse
+                             (
+                                     employeesPage.getNumber(),
+                                     employeesPage.getSize(),
+                                     employeesPage.getTotalElements(),
+                                     employeesPage.getTotalPages(),
+                                     employeeMapper.toEmployeeDTO(employeesPage.getContent())
+                              );
+
+
+
+
+            if (Objects.isNull(paginationEmployeeResponse))
                 throw new EmployeeNotFoundException("There are no employees22",Code.EMPTYEMPLOYEELIST);
-            return ResponseEntity.ok(employeesPage);
+            return ResponseEntity.ok(paginationEmployeeResponse);
         }
-
-
     }
 
     public List<EmployeeProjections> findAllEmployeesBySomeAttributes() {
