@@ -1,7 +1,10 @@
 package org.example.ordermanagement.controller;
 
-import org.apache.coyote.Request;
+
+import org.example.ordermanagement.controller.dto.OrderDto;
 import org.example.ordermanagement.model.Order;
+import org.example.ordermanagement.service.CustomerService;
+import org.example.ordermanagement.service.OrderDetailsService;
 import org.example.ordermanagement.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +18,13 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private OrderDetailsService orderDetailsService;
 
 
     @GetMapping
-    public List<Order> getAllOrders() {
-        return orderService.getAllOrders();
+    public OrderDto getAllOrders(@RequestParam Long id ) {
+        return orderDetailsService.getOrderById(id);
     }
 
 
