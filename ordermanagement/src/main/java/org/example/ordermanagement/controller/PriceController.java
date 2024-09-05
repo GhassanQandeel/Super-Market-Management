@@ -17,11 +17,13 @@ public class PriceController {
 
 
     @GetMapping
+    // Where is dtos ?
     public List<Price> getPrice() {
         return  priceService.getPrice();
     }
 
     @PostMapping
+    // Where is dtos ?
     public void setPrice(@RequestBody Price price) {
         priceService.setPrice(price);
     }

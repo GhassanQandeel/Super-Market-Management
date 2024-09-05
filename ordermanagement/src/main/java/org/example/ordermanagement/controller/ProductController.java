@@ -14,10 +14,12 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
+    // Where is dtos ?
     public List<Product> getProducts() {
         return productService.getProducts();
     }
     @PostMapping
+    // Where is dtos ?
     public void addProduct(@RequestBody Product product) {
         productService.addProduct(product);
     }

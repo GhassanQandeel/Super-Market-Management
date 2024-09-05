@@ -1,6 +1,6 @@
 package org.example.ordermanagement.projections;
 
-public interface OrderItemsProjections {
+public interface OrderItemProjections {
 
     Long getId();
     String getName();

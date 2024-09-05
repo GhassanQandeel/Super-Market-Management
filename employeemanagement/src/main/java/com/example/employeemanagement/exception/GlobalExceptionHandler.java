@@ -30,15 +30,23 @@ public class GlobalExceptionHandler  extends ResponseEntityExceptionHandler {
 
 
     //For Employee Management
+
+
+
     @ExceptionHandler(EmployeeManagementException.class)
     public ResponseEntity<ErrorResponseDetails> handleEmployeeManagementException(EmployeeManagementException e) {
 
         List<ErrorResponse> errors = new ArrayList<>();
         errors.add(new ErrorResponse(e.getMessage(),e.getCode()));
-        ErrorResponseDetails errorResponseDetails = new ErrorResponseDetails(LocalDateTime.now(),HttpStatus.BAD_REQUEST,"/employee",errors);
+            ErrorResponseDetails errorResponseDetails = new ErrorResponseDetails(LocalDateTime.now(),HttpStatus.BAD_REQUEST,"/employees",errors);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDetails);
     }
+
+
+
+
+
     // for argument exception
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {

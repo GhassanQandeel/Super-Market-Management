@@ -15,10 +15,12 @@ public class CustomerController {
     private CustomerService customerService;
 
     @GetMapping
+    // Where is dtos ?
     public List<Customer> getCustomers() {
         return customerService.getCustomers();
     }
     @PostMapping
+    // Where is dtos ?
     public void createCustomer(@RequestBody Customer customer) {
         customerService.createCustomer(customer);
     }
