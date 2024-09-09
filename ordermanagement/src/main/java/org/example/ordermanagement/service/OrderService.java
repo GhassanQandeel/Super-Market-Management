@@ -1,5 +1,8 @@
 package org.example.ordermanagement.service;
 
+
+
+import com.zaxxer.hikari.HikariDataSource;
 import org.example.ordermanagement.controller.requestdto.order.OrderFinalizeRequestDto;
 import org.example.ordermanagement.exception.dto.Code;
 import org.example.ordermanagement.exception.order.OrderNotFoundException;
@@ -9,6 +12,8 @@ import org.example.ordermanagement.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +22,8 @@ import java.util.Optional;
 public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private HikariDataSource dataSource;
 
 
     public Order getOrderById(Long id) {
@@ -41,9 +48,10 @@ public class OrderService {
     }
 
 
-    public Long createOrder(Order order) {
+
+    public Order createOrder(Order order) {
         orderRepository.save(order);
-        return order.getId();
+        return orderRepository.findById(order.getId()).get();
     }
 
 

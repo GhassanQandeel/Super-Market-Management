@@ -8,7 +8,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class OrderItemResponse {
+public class OrderItemDto {
     private Long productId;
     private String productName;
     private int price;

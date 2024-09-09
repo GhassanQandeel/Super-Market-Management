@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PriceService {
@@ -21,6 +22,14 @@ public class PriceService {
     }
     public void createPrice(Price price) {
         priceRepository.save(price);
+    }
+    public Price getPrice(Long id) {
+       Optional<Price> price = priceRepository.findById(id);
+        if (price.isEmpty())
+            throw new RuntimeException("Price with id "+ id +" not found");
+
+        return price.get();
+
     }
 
     public List<Long> getPriceIds() {

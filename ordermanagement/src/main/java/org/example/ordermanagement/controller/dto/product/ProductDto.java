@@ -4,6 +4,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.example.ordermanagement.controller.dto.price.PriceDto;
 import org.example.ordermanagement.model.Price;
 
 @Data
@@ -15,5 +16,5 @@ import org.example.ordermanagement.model.Price;
 public class ProductDto {
     private Long id;
     private String name;
-    private Price price;
+    private PriceDto price;
 }

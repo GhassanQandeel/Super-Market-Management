@@ -28,4 +28,19 @@ public class CustomerExceptionHandler {
 
         return new ResponseEntity<>(errorResponseDetails, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<ErrorResponseDetails> handleCustomerNotFoundException(CustomerNotFoundException handler) {
+        List<ErrorResponse> errorResponse = new ArrayList<>();
+        errorResponse.add(new ErrorResponse(handler.getMessage(),handler.getCode()));
+        ErrorResponseDetails errorResponseDetails = new ErrorResponseDetails(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND,
+                "/customers",
+                errorResponse
+        );
+        return new ResponseEntity<>(errorResponseDetails, HttpStatus.NOT_FOUND);
+    }
+
+
+
 }

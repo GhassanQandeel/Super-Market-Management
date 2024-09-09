@@ -6,6 +6,7 @@ import org.example.ordermanagement.controller.requestdto.product.ProductRequestD
 import org.example.ordermanagement.model.Price;
 import org.example.ordermanagement.model.Product;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 @Component
 public abstract class ProductMapper {
+
 
     public abstract ProductDto toProductDto(Product product);
 

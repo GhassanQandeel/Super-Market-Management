@@ -4,7 +4,7 @@ package org.example.ordermanagement.mapper;
 import org.example.ordermanagement.controller.requestdto.order.OrderCreationRequestDto;
 import org.example.ordermanagement.controller.dto.order.FinalizeOrderDto;
 import org.example.ordermanagement.controller.dto.order.OrderDto;
-import org.example.ordermanagement.controller.dto.orderitem.OrderItemResponse;
+import org.example.ordermanagement.controller.dto.orderitem.OrderItemDto;
 import org.example.ordermanagement.exception.business.AmountPaidNotEnoughException;
 import org.example.ordermanagement.exception.dto.Code;
 import org.example.ordermanagement.exception.order.OrderCustomerNotFoundException;
@@ -15,6 +15,7 @@ import org.example.ordermanagement.model.Status;
 import org.example.ordermanagement.service.CustomerService;
 import org.example.ordermanagement.service.OrderItemService;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,23 +24,43 @@ import java.util.List;
 
 
 @Mapper(componentModel="spring")
-@Component
+
 public abstract class OrderMapper {
     @Autowired
     private CustomerService customerService;
     @Autowired
     private OrderItemService orderItemService;
+    @Autowired
+    private CustomerMapper customerMapper;
+    @Autowired
+    private OrderItemMapper orderItemMapper;
 
 
 
-    public abstract OrderDto toOrderDto(Order order);
+    public OrderDto toOrderDto(Order order){
+         if ( order == null ) {
+            return null;
+        }
+
+        OrderDto orderDto = new OrderDto();
+
+        orderDto.setCustomerDto(customerMapper.toDto( order.getCustomer()));
+        orderDto.setId( order.getId() );
+        orderDto.setCreatedAt( order.getCreatedAt() );
+        orderDto.setCashierId( order.getCashierId() );
+        orderDto.setAmountPaid( order.getAmountPaid() );
+        orderDto.setStatus( order.getStatus() );
+        orderDto.setOrderItemDtos(orderItemMapper.toOrderItemList(orderItemService.getOrderItemsByOrderId(order.getId())));
+        orderDto.setTotalPrice(orderItemService.getOrderItemTotalPrice(order.getId()));
+        return orderDto;
+    }
 
 
     public Order toOrder(OrderCreationRequestDto orderCreationRequestDto){
             Order order = new Order();
 
             if(customerService.getCustomerIds().contains(orderCreationRequestDto.getCustomerId()))
-                order.setCustomer(new Customer(orderCreationRequestDto.getCustomerId(), "","",""));
+                order.setCustomer(customerService.getCustomer(orderCreationRequestDto.getCustomerId()));
             else
                 throw new OrderCustomerNotFoundException("Customer  of this order ID"+orderCreationRequestDto.getCustomerId()+" not found", Code.CUSTOMER_NOT_FOUND);
 
@@ -75,23 +96,4 @@ public abstract class OrderMapper {
 
 
 
-
-    public OrderItemResponse toOrderItem(OrderItem orderItem) {
-        OrderItemResponse orderItemResponse = new OrderItemResponse();
-
-        orderItemResponse.setProductId(orderItem.getProduct().getId());
-        orderItemResponse.setProductName(orderItem.getProduct().getName());
-        orderItemResponse.setPrice(orderItem.getPrice().getSellingPrice());
-        orderItemResponse.setQuantity(orderItem.getQuantity());
-        return orderItemResponse;
-    }
-
-    public List<OrderItemResponse> toOrderItemList(List<OrderItem> orderItemList) {
-
-        List<OrderItemResponse> orderItemResponses = new ArrayList<>();
-        for (OrderItem orderItem : orderItemList) {
-            orderItemResponses.add(toOrderItem(orderItem));
-        }
-        return orderItemResponses;
-    }
 }

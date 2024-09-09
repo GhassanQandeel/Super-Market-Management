@@ -1,6 +1,7 @@
 package org.example.ordermanagement.mapper;
 
 
+import org.example.ordermanagement.controller.dto.orderitem.OrderItemDto;
 import org.example.ordermanagement.controller.requestdto.orderitem.OrderItemAdditionRequestDto;
 import org.example.ordermanagement.exception.dto.Code;
 import org.example.ordermanagement.exception.orderitem.OrderItemOrderNotFoundException;
@@ -15,6 +16,9 @@ import org.example.ordermanagement.service.PriceService;
 import org.example.ordermanagement.service.ProductService;
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mapper(componentModel="spring")
 abstract public class OrderItemMapper {
@@ -40,14 +44,36 @@ abstract public class OrderItemMapper {
 
 
 
-        orderItem.setOrder(new Order(id,null,0,0,null,null));
-        orderItem.setProduct(new Product((long) requestDto.getProductId(), "",null));
-        orderItem.setPrice(new Price(productService.getProductPrice(orderItem.getProduct().getId()),0,0));
+        orderItem.setOrder(orderService.getOrderById(id));
+        orderItem.setProduct(productService.getProductById((long)requestDto.getProductId()));
+        orderItem.setPrice(priceService.getPrice(orderItem.getProduct().getPrice().getId()));
         orderItem.setQuantity(requestDto.getQuantity());
 
         return orderItem;
 
     }
+
+
+
+    public OrderItemDto toOrderItem(OrderItem orderItem) {
+        OrderItemDto orderItemResponse = new OrderItemDto();
+
+        orderItemResponse.setProductId(orderItem.getProduct().getId());
+        orderItemResponse.setProductName(orderItem.getProduct().getName());
+        orderItemResponse.setPrice(orderItem.getPrice().getSellingPrice());
+        orderItemResponse.setQuantity(orderItem.getQuantity());
+        return orderItemResponse;
+    }
+
+    public List<OrderItemDto> toOrderItemList(List<OrderItem> orderItemList) {
+
+        List<OrderItemDto> orderItemResponses = new ArrayList<>();
+        for (OrderItem orderItem : orderItemList) {
+            orderItemResponses.add(toOrderItem(orderItem));
+        }
+        return orderItemResponses;
+    }
+
 
 
 
