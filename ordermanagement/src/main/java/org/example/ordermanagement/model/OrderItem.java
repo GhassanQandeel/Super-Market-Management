@@ -23,7 +23,7 @@ public class OrderItem {
     @Builder.Default
     private int quantity=1;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "price_id")
     private Price price;
 
@@ -31,7 +31,7 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "product_id")
     private Product product;
 

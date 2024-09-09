@@ -1,8 +1,9 @@
-package org.example.ordermanagement.controller.RequestDto;
+package org.example.ordermanagement.controller.requestdto.order;
 
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,6 +13,6 @@ public class OrderCreationRequestDto {
 
     @Positive(message = "cashier id is necessary to produce the order")
     private int cashierId;
-
-    private long customerId;
+    @Builder.Default
+    private long customerId=0;
 }

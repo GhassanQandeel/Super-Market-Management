@@ -1,8 +1,8 @@
-package org.example.ordermanagement.exception.orderexceptionhandler;
+package org.example.ordermanagement.exception.order;
 
 import lombok.Getter;
 import org.example.ordermanagement.exception.dto.Code;
-import org.hibernate.tool.schema.spi.ExceptionHandler;
+
 @Getter
 public class OrderCreationRequestNullExceptionHandler extends RuntimeException{
     private Code code;

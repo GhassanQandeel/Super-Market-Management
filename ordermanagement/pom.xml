@@ -76,7 +76,12 @@
             <artifactId>hibernate-validator</artifactId>
             <version>8.0.0.Final</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
 
 
     </dependencies>
@@ -100,6 +105,9 @@
                             <version>1.18.28</version>
                         </path>
                     </annotationProcessorPaths>
+                    <source>21</source>
+                    <target>21</target>
+                    <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>
 

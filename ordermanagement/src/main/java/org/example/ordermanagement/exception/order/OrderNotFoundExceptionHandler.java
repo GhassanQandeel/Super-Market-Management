@@ -1,4 +1,4 @@
-package org.example.ordermanagement.exception.orderexceptionhandler;
+package org.example.ordermanagement.exception.order;
 
 import lombok.Getter;
 import org.example.ordermanagement.exception.dto.Code;

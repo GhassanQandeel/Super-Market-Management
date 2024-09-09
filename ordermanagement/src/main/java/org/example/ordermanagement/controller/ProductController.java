@@ -1,6 +1,8 @@
 package org.example.ordermanagement.controller;
 
-import org.example.ordermanagement.model.Product;
+import org.example.ordermanagement.controller.dto.product.ProductDto;
+import org.example.ordermanagement.controller.requestdto.product.ProductRequestDto;
+import org.example.ordermanagement.mapper.ProductMapper;
 import org.example.ordermanagement.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,16 +14,18 @@ import java.util.List;
 public class ProductController {
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ProductMapper productMapper;
+
 
     @GetMapping
-    // Where is dtos ?
-    public List<Product> getProducts() {
-        return productService.getProducts();
+    public List<ProductDto> getAllProducts() {
+        return productMapper.toProductDtoList(productService.getAllProducts());
     }
+
     @PostMapping
-    // Where is dtos ?
-    public void addProduct(@RequestBody Product product) {
-        productService.addProduct(product);
+    public void createProduct(@RequestBody ProductRequestDto productRequestDto) {
+        productService.createProduct(productMapper.toProduct(productRequestDto));
     }
 
 
