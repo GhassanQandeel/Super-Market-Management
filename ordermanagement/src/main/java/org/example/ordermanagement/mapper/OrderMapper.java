@@ -7,7 +7,7 @@ import org.example.ordermanagement.controller.dto.order.OrderDto;
 import org.example.ordermanagement.controller.dto.orderitem.OrderItemResponse;
 import org.example.ordermanagement.exception.business.AmountPaidNotEnoughException;
 import org.example.ordermanagement.exception.dto.Code;
-import org.example.ordermanagement.exception.order.OrderCustomerNotFound;
+import org.example.ordermanagement.exception.order.OrderCustomerNotFoundException;
 import org.example.ordermanagement.model.Customer;
 import org.example.ordermanagement.model.Order;
 import org.example.ordermanagement.model.OrderItem;
@@ -41,7 +41,7 @@ public abstract class OrderMapper {
             if(customerService.getCustomerIds().contains(orderCreationRequestDto.getCustomerId()))
                 order.setCustomer(new Customer(orderCreationRequestDto.getCustomerId(), "","",""));
             else
-                throw new OrderCustomerNotFound("Customer  of this order ID"+orderCreationRequestDto.getCustomerId()+" not found", Code.CUSTOMER_NOT_FOUND);
+                throw new OrderCustomerNotFoundException("Customer  of this order ID"+orderCreationRequestDto.getCustomerId()+" not found", Code.CUSTOMER_NOT_FOUND);
 
             order.setCashierId(orderCreationRequestDto.getCashierId());
             order.setStatus(Status.ADJUSTABLE);

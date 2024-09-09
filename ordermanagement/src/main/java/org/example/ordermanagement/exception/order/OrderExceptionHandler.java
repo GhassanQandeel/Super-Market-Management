@@ -37,8 +37,8 @@ public class OrderExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(details);
     }
 
-    @ExceptionHandler(OrderNotFoundExceptionHandler.class)
-    public ResponseEntity<ErrorResponseDetails> handleOrderNotFoundExceptionHandler(OrderNotFoundExceptionHandler oHandler) {
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<ErrorResponseDetails> handleOrderNotFoundExceptionHandler(OrderNotFoundException oHandler) {
 
         List<ErrorResponse> errors = new ArrayList<>();
         errors.add(new ErrorResponse(oHandler.getMessage(), Code.ORDER_NOT_FOUND));
@@ -47,8 +47,8 @@ public class OrderExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(details);
     }
 
-    @ExceptionHandler(OrderCreationRequestNullExceptionHandler.class)
-    public ResponseEntity<ErrorResponseDetails> handleOrderCreationRequestNullExceptionHandler(OrderCreationRequestNullExceptionHandler oHandler) {
+    @ExceptionHandler(OrderCreationRequestNullException.class)
+    public ResponseEntity<ErrorResponseDetails> handleOrderCreationRequestNullExceptionHandler(OrderCreationRequestNullException oHandler) {
         List<ErrorResponse> errors = new ArrayList<>();
         errors.add(new ErrorResponse(oHandler.getMessage(), Code.CREATION_ORDER_NULL));
         ErrorResponseDetails details = new ErrorResponseDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST, "/orders", errors);
@@ -58,16 +58,16 @@ public class OrderExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
-    @ExceptionHandler(OrderCustomerNotFound.class)
-    public ResponseEntity<ErrorResponseDetails> handleOrderCustomerNotFoundExceptionHandler(OrderCustomerNotFound oHandler) {
+    @ExceptionHandler(OrderCustomerNotFoundException.class)
+    public ResponseEntity<ErrorResponseDetails> handleOrderCustomerNotFoundExceptionHandler(OrderCustomerNotFoundException oHandler) {
         List<ErrorResponse> errors = new ArrayList<>();
         errors.add(new ErrorResponse(oHandler.getMessage(),oHandler.getCode()));
         ErrorResponseDetails details = new ErrorResponseDetails(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR, "/orders", errors);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(details);
     }
 
-    @ExceptionHandler(OrderFinalizeNullExceptionHandler.class)
-    public ResponseEntity<ErrorResponseDetails> handleOrderFinalizeNullExceptionHandler(OrderFinalizeNullExceptionHandler oHandler) {
+    @ExceptionHandler(OrderFinalizeNullException.class)
+    public ResponseEntity<ErrorResponseDetails> handleOrderFinalizeNullExceptionHandler(OrderFinalizeNullException oHandler) {
         List<ErrorResponse> errors = new ArrayList<>();
         errors.add(new ErrorResponse(oHandler.getMessage(),oHandler.getCode()));
         ErrorResponseDetails details = new ErrorResponseDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST, "/orders", errors);

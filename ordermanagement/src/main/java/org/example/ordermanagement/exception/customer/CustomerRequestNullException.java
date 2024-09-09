@@ -3,16 +3,16 @@ package org.example.ordermanagement.exception.customer;
 import lombok.Getter;
 import org.example.ordermanagement.exception.dto.Code;
 @Getter
-public class CustomerRequestNullExceptionHandler extends RuntimeException{
+public class CustomerRequestNullException extends RuntimeException{
     private Code code;
-    public CustomerRequestNullExceptionHandler() {
+    public CustomerRequestNullException() {
         super("Customer request is null");
     }
-    public CustomerRequestNullExceptionHandler(String message) {
+    public CustomerRequestNullException(String message) {
         super(message);
     }
 
-    public CustomerRequestNullExceptionHandler(String message,Code code) {
+    public CustomerRequestNullException(String message, Code code) {
         super(message);
         this.code = code;
     }

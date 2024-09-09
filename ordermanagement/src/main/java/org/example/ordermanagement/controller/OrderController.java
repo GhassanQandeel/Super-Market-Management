@@ -9,9 +9,9 @@ import org.example.ordermanagement.controller.dto.order.FinalizeOrderDto;
 import org.example.ordermanagement.controller.dto.order.OrderDto;
 import org.example.ordermanagement.controller.dto.orderitem.OrderItemResponse;
 import org.example.ordermanagement.exception.dto.Code;
-import org.example.ordermanagement.exception.order.OrderCreationRequestNullExceptionHandler;
-import org.example.ordermanagement.exception.order.OrderFinalizeNullExceptionHandler;
-import org.example.ordermanagement.exception.orderitem.OrderItemAdditionNullRequest;
+import org.example.ordermanagement.exception.order.OrderCreationRequestNullException;
+import org.example.ordermanagement.exception.order.OrderFinalizeNullException;
+import org.example.ordermanagement.exception.orderitem.OrderItemAdditionNullRequestException;
 import org.example.ordermanagement.mapper.OrderItemMapper;
 import org.example.ordermanagement.mapper.OrderMapper;
 import org.example.ordermanagement.service.OrderItemService;
@@ -53,7 +53,7 @@ public class OrderController {
     @PostMapping
     public Long CreateOrder(@Valid OrderCreationRequestDto orderCreationRequestDto) {
         if (Objects.isNull(orderCreationRequestDto))
-            throw new OrderCreationRequestNullExceptionHandler("The creation Request is null", Code.CREATION_ORDER_NULL);
+            throw new OrderCreationRequestNullException("The creation Request is null", Code.CREATION_ORDER_NULL);
 
         return orderService.createOrder(orderMapper.toOrder(orderCreationRequestDto));
     }
@@ -62,7 +62,7 @@ public class OrderController {
     @PostMapping("/{id}/order-items")
     public void addOrderItem(@PathVariable Long id, @Valid OrderItemAdditionRequestDto orderItemAdditionRequestDto) {
         if(Objects.isNull(orderItemAdditionRequestDto))
-            throw new OrderItemAdditionNullRequest("This order Item addition is null ",Code.ORDER_ITEM_ADDITION_NULL,id);
+            throw new OrderItemAdditionNullRequestException("This order Item addition is null ",Code.ORDER_ITEM_ADDITION_NULL,id);
 
         orderItemService.addOrderItem(orderItemMapper.toOrderItem(id,orderItemAdditionRequestDto));
     }
@@ -79,7 +79,7 @@ public class OrderController {
     @PostMapping("/{id}/order-items/finalize")
     public FinalizeOrderDto finalizeOrder(@PathVariable Long id, @Valid OrderFinalizeRequestDto orderFinalizeRequestDto){
         if (Objects.isNull(orderFinalizeRequestDto))
-            throw new OrderFinalizeNullExceptionHandler("The final request is null ->> please enter require data to final your order ",Code.ORDER_FINALIZATION_NULL,id);
+            throw new OrderFinalizeNullException("The final request is null ->> please enter require data to final your order ",Code.ORDER_FINALIZATION_NULL,id);
         return orderMapper.toFinalizeOrderDto(orderService.finalizeOrder(id,orderFinalizeRequestDto));
     }
 

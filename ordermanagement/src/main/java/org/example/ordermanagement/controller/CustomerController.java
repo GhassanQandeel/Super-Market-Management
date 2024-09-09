@@ -2,7 +2,7 @@ package org.example.ordermanagement.controller;
 
 import org.example.ordermanagement.controller.dto.customer.CustomerDto;
 import org.example.ordermanagement.controller.requestdto.customer.CustomerRequestDto;
-import org.example.ordermanagement.exception.customer.CustomerRequestNullExceptionHandler;
+import org.example.ordermanagement.exception.customer.CustomerRequestNullException;
 import org.example.ordermanagement.exception.dto.Code;
 import org.example.ordermanagement.mapper.CustomerMapper;
 import org.example.ordermanagement.service.CustomerService;
@@ -30,7 +30,7 @@ public class CustomerController {
     public void createCustomer(@RequestBody CustomerRequestDto customerRequestDto) {
 
         if (Objects.isNull(customerRequestDto))
-            throw new CustomerRequestNullExceptionHandler("Customer Request is null", Code.CUSTOMER_REQUEST_NULL);
+            throw new CustomerRequestNullException("Customer Request is null", Code.CUSTOMER_REQUEST_NULL);
 
         customerService.createCustomer(customerMapper.toEntity(customerRequestDto));
     }

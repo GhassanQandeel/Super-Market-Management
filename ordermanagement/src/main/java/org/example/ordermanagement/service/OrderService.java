@@ -2,7 +2,7 @@ package org.example.ordermanagement.service;
 
 import org.example.ordermanagement.controller.requestdto.order.OrderFinalizeRequestDto;
 import org.example.ordermanagement.exception.dto.Code;
-import org.example.ordermanagement.exception.order.OrderNotFoundExceptionHandler;
+import org.example.ordermanagement.exception.order.OrderNotFoundException;
 import org.example.ordermanagement.model.Order;
 import org.example.ordermanagement.model.Status;
 import org.example.ordermanagement.repository.OrderRepository;
@@ -24,7 +24,7 @@ public class OrderService {
         Optional<Order> order = orderRepository.findById(id);
 
         if (order.isEmpty()) {
-            throw new OrderNotFoundExceptionHandler("Order with id : " + id + " is not found ", Code.ORDER_NOT_FOUND);
+            throw new OrderNotFoundException("Order with id : " + id + " is not found ", Code.ORDER_NOT_FOUND);
         }
 
 
@@ -51,7 +51,7 @@ public class OrderService {
     public Order finalizeOrder(Long id, OrderFinalizeRequestDto orderFinalizeRequestDto) {
         Optional<Order> order = orderRepository.findById(id);
         if (order.isEmpty()) {
-            throw new OrderNotFoundExceptionHandler("Order with id : " + id + " is not found ", Code.ORDER_NOT_FOUND);
+            throw new OrderNotFoundException("Order with id : " + id + " is not found ", Code.ORDER_NOT_FOUND);
         }
         order.get().setStatus(Status.NOT_EDITABLE);
         order.get().setAmountPaid(orderFinalizeRequestDto.getAmountPaid());

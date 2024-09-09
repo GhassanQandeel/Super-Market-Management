@@ -3,12 +3,12 @@ package org.example.ordermanagement.exception.order;
 import lombok.Getter;
 import org.example.ordermanagement.exception.dto.Code;
 @Getter
-public class OrderNotFoundExceptionHandler extends RuntimeException {
+public class OrderNotFoundException extends RuntimeException {
     private Code code;
-    public OrderNotFoundExceptionHandler() {
+    public OrderNotFoundException() {
         super();
     }
-    public OrderNotFoundExceptionHandler(String message,Code code) {
+    public OrderNotFoundException(String message, Code code) {
         super(message);
         this.code = code;
     }

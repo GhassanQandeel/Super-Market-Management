@@ -4,16 +4,16 @@ import lombok.Getter;
 import org.example.ordermanagement.exception.dto.Code;
 
 @Getter
-public class OrderCustomerNotFound extends RuntimeException {
+public class OrderCustomerNotFoundException extends RuntimeException {
     private Code code;
 
-    public OrderCustomerNotFound() {
+    public OrderCustomerNotFoundException() {
         super();
     }
-    public OrderCustomerNotFound(String message) {
+    public OrderCustomerNotFoundException(String message) {
         super(message);
     }
-    public OrderCustomerNotFound(String message, Code code) {
+    public OrderCustomerNotFoundException(String message, Code code) {
         super(message);
         this.code = code;
     }

@@ -16,8 +16,8 @@ import java.util.List;
 public class OrderItemExceptionHandler {
 
 
-    @ExceptionHandler(OrderItemNotFound.class)
-    public ResponseEntity<ErrorResponseDetails> orderItemNotFoundExceptionHandler(OrderItemNotFound oi) {
+    @ExceptionHandler(OrderItemNotFoundException.class)
+    public ResponseEntity<ErrorResponseDetails> orderItemNotFoundExceptionHandler(OrderItemNotFoundException oi) {
         List<ErrorResponse> errorResponses=new ArrayList<>();
         errorResponses.add(new ErrorResponse(oi.getMessage(),oi.getCode()));
         ErrorResponseDetails errorResponseDetails=new ErrorResponseDetails(
@@ -30,8 +30,8 @@ public class OrderItemExceptionHandler {
         return new ResponseEntity<>(errorResponseDetails, HttpStatus.NOT_FOUND);
 
     }
-    @ExceptionHandler(OrderItemOrderNotFound.class)
-    public ResponseEntity<ErrorResponseDetails> orderItemOrderNotFoundExceptionHandler(OrderItemOrderNotFound oi) {
+    @ExceptionHandler(OrderItemOrderNotFoundException.class)
+    public ResponseEntity<ErrorResponseDetails> orderItemOrderNotFoundExceptionHandler(OrderItemOrderNotFoundException oi) {
         List<ErrorResponse> errorResponses=new ArrayList<>();
         errorResponses.add(new ErrorResponse(oi.getMessage(),oi.getCode()));
         ErrorResponseDetails errorResponseDetails=new ErrorResponseDetails(
@@ -42,8 +42,8 @@ public class OrderItemExceptionHandler {
         );
         return new ResponseEntity<>(errorResponseDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    @ExceptionHandler(OrderItemProductNotFound.class)
-    public ResponseEntity<ErrorResponseDetails> orderItemProductNotFoundExceptionHandler(OrderItemProductNotFound oi) {
+    @ExceptionHandler(OrderItemProductNotFoundException.class)
+    public ResponseEntity<ErrorResponseDetails> orderItemProductNotFoundExceptionHandler(OrderItemProductNotFoundException oi) {
         List<ErrorResponse> errorResponses=new ArrayList<>();
         errorResponses.add(new ErrorResponse(oi.getMessage(),oi.getCode()));
         ErrorResponseDetails errorResponseDetails=new ErrorResponseDetails(
@@ -56,8 +56,8 @@ public class OrderItemExceptionHandler {
         return new ResponseEntity<>(errorResponseDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(OrderItemPriceNotFound.class)
-    public ResponseEntity<ErrorResponseDetails> orderItemPriceNotFoundExceptionHandler(OrderItemPriceNotFound oi) {
+    @ExceptionHandler(OrderItemPriceNotFoundException.class)
+    public ResponseEntity<ErrorResponseDetails> orderItemPriceNotFoundExceptionHandler(OrderItemPriceNotFoundException oi) {
         List<ErrorResponse> errorResponses=new ArrayList<>();
         errorResponses.add(new ErrorResponse(oi.getMessage(),oi.getCode()));
         ErrorResponseDetails errorResponseDetails=new ErrorResponseDetails(
@@ -69,8 +69,8 @@ public class OrderItemExceptionHandler {
         return new ResponseEntity<>(errorResponseDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(OrderItemAdditionNullRequest.class)
-    public ResponseEntity<ErrorResponseDetails> orderItemAdditionNullRequestExceptionHandler(OrderItemAdditionNullRequest oi) {
+    @ExceptionHandler(OrderItemAdditionNullRequestException.class)
+    public ResponseEntity<ErrorResponseDetails> orderItemAdditionNullRequestExceptionHandler(OrderItemAdditionNullRequestException oi) {
         List<ErrorResponse> errorResponses=new ArrayList<>();
         errorResponses.add(new ErrorResponse(oi.getMessage(),oi.getCode()));
         ErrorResponseDetails errorResponseDetails=new ErrorResponseDetails(

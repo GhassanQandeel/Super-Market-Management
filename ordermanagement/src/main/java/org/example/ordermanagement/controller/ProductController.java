@@ -25,6 +25,7 @@ public class ProductController {
 
     @PostMapping
     public void createProduct(@RequestBody ProductRequestDto productRequestDto) {
+
         productService.createProduct(productMapper.toProduct(productRequestDto));
     }
 
