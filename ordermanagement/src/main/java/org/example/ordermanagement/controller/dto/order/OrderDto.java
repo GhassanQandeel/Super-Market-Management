@@ -4,7 +4,7 @@ package org.example.ordermanagement.controller.dto.order;
 import lombok.*;
 import org.example.ordermanagement.controller.dto.customer.CustomerDto;
 import org.example.ordermanagement.controller.dto.orderitem.OrderItemDto;
-import org.example.ordermanagement.model.Customer;
+
 import org.example.ordermanagement.model.Status;
 
 import java.time.LocalDateTime;

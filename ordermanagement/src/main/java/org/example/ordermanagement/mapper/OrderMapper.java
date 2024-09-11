@@ -1,6 +1,9 @@
 package org.example.ordermanagement.mapper;
 
 
+import org.example.ordermanagement.controller.dto.customer.CustomerDto;
+import org.example.ordermanagement.controller.dto.price.PriceDto;
+import org.example.ordermanagement.controller.dto.product.ProductDto;
 import org.example.ordermanagement.controller.requestdto.order.OrderCreationRequestDto;
 import org.example.ordermanagement.controller.dto.order.FinalizeOrderDto;
 import org.example.ordermanagement.controller.dto.order.OrderDto;
@@ -8,10 +11,7 @@ import org.example.ordermanagement.controller.dto.orderitem.OrderItemDto;
 import org.example.ordermanagement.exception.business.AmountPaidNotEnoughException;
 import org.example.ordermanagement.exception.dto.Code;
 import org.example.ordermanagement.exception.order.OrderCustomerNotFoundException;
-import org.example.ordermanagement.model.Customer;
-import org.example.ordermanagement.model.Order;
-import org.example.ordermanagement.model.OrderItem;
-import org.example.ordermanagement.model.Status;
+import org.example.ordermanagement.model.*;
 import org.example.ordermanagement.service.CustomerService;
 import org.example.ordermanagement.service.OrderItemService;
 import org.mapstruct.Mapper;
@@ -30,29 +30,47 @@ public abstract class OrderMapper {
     private CustomerService customerService;
     @Autowired
     private OrderItemService orderItemService;
-    @Autowired
-    private CustomerMapper customerMapper;
-    @Autowired
-    private OrderItemMapper orderItemMapper;
 
 
+    @Mapping(source = "orderItems",target = "orderItemDtos")
+    @Mapping(source = "customer",target = "customerDto")
+     public OrderDto toOrderDto(Order order){
+        OrderDto orderDto = new OrderDto();
+        orderDto.setId(order.getId());
+        orderDto.setStatus(order.getStatus());
+        orderDto.setTotalPrice(order.getTotalPrice());
+        orderDto.setCreatedAt(order.getCreatedAt());
+        orderDto.setStatus(order.getStatus());
+        orderDto.setCashierId(order.getCashierId());
 
-    public OrderDto toOrderDto(Order order){
-         if ( order == null ) {
-            return null;
+        Customer customer = order.getCustomer();
+        CustomerDto customerDto = new CustomerDto();
+        customerDto.setId(customer.getId());
+        customerDto.setName(customer.getName());
+        customerDto.setCity(customer.getCity());
+        customerDto.setPhone(customer.getPhone());
+        orderDto.setCustomerDto(customerDto);
+
+        List<OrderItem> orderItems = order.getOrderItems();
+        List<OrderItemDto> orderItemDtos = new ArrayList<>();
+        for (OrderItem orderItem : orderItems) {
+            Product product = orderItem.getProduct();
+            Price price = orderItem.getPrice();
+
+
+            orderItemDtos.add(
+                    new OrderItemDto(
+                            product.getId(),
+                            product.getName(),
+                            price.getSellingPrice(),
+                            orderItem.getQuantity()
+                    )
+            );
         }
 
-        OrderDto orderDto = new OrderDto();
-
-        orderDto.setCustomerDto(customerMapper.toDto( order.getCustomer()));
-        orderDto.setId( order.getId() );
-        orderDto.setCreatedAt( order.getCreatedAt() );
-        orderDto.setCashierId( order.getCashierId() );
-        orderDto.setAmountPaid( order.getAmountPaid() );
-        orderDto.setStatus( order.getStatus() );
-        orderDto.setOrderItemDtos(orderItemMapper.toOrderItemList(orderItemService.getOrderItemsByOrderId(order.getId())));
-        orderDto.setTotalPrice(orderItemService.getOrderItemTotalPrice(order.getId()));
+        orderDto.setOrderItemDtos(orderItemDtos);
         return orderDto;
+
     }
 
 

@@ -7,7 +7,10 @@ import org.example.ordermanagement.controller.requestdto.order.OrderFinalizeRequ
 import org.example.ordermanagement.exception.dto.Code;
 import org.example.ordermanagement.exception.order.OrderNotFoundException;
 import org.example.ordermanagement.model.Order;
+import org.example.ordermanagement.model.OrderItem;
 import org.example.ordermanagement.model.Status;
+import org.example.ordermanagement.projections.OrderItemProjections;
+import org.example.ordermanagement.repository.OrderItemRepository;
 import org.example.ordermanagement.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +26,8 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
-    private HikariDataSource dataSource;
+    private OrderItemRepository orderItemRepository;
+
 
 
     public Order getOrderById(Long id) {
@@ -33,8 +37,11 @@ public class OrderService {
         if (order.isEmpty()) {
             throw new OrderNotFoundException("Order with id : " + id + " is not found ", Code.ORDER_NOT_FOUND);
         }
+        Order order1 = order.get();
+        List<OrderItem> orderItems =orderItemRepository.findByOrderId(id);
 
-
+        order1.setOrderItems(orderItems);
+        order1.setTotalPrice(orderItems.stream().mapToInt(orderItem -> orderItem.getPrice().getSellingPrice()*orderItem.getQuantity()).sum());
         return order.get();
     }
 

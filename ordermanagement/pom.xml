@@ -109,13 +109,11 @@
                             <version>1.18.28</version>
                         </path>
                     </annotationProcessorPaths>
-                    <source>21</source>
+                      <source>21</source>
                     <target>21</target>
                     <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>
-
-
         </plugins>
     </build>
 

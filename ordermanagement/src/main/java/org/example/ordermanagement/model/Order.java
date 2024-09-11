@@ -3,9 +3,12 @@ package org.example.ordermanagement.model;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -33,10 +36,15 @@ public class Order {
     @Column(name = "status")
     private Status status;
 
+    @Transient
+    private List<OrderItem> orderItems;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @Transient
+    private int totalPrice;
 
 
 

@@ -41,12 +41,13 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public OrderDto getOrderById(@PathVariable Long id) {
-        return orderMapper.toOrderDto(orderService.getOrderById(id));
+
+        Order order = orderService.getOrderById(id);
+
+        return orderMapper.toOrderDto(order);
+
     }
 
-
-    // Step 1: Create Order
-    // Return the order object
     @PostMapping
     public OrderDto CreateOrder(@Valid OrderCreationRequestDto orderCreationRequestDto) {
         if (Objects.isNull(orderCreationRequestDto))
@@ -62,8 +63,7 @@ public class OrderController {
 
     }
 
-    // Step 2: add Products.
-    // Order dto with items and their prices
+
     @PostMapping("/{id}/order-items")
     public OrderDto addOrderItem(@PathVariable Long id, @Valid OrderItemAdditionRequestDto orderItemAdditionRequestDto) {
         if (Objects.isNull(orderItemAdditionRequestDto))
@@ -74,7 +74,7 @@ public class OrderController {
 
 
 
-/*
+
 
     @PostMapping("/{id}/order-items/finalize")
     public FinalizeOrderDto finalizeOrder(@PathVariable Long id, @Valid OrderFinalizeRequestDto orderFinalizeRequestDto){
@@ -82,7 +82,7 @@ public class OrderController {
             throw new OrderFinalizeNullException("The final request is null ->> please enter require data to final your order ",Code.ORDER_FINALIZATION_NULL,id);
         return orderMapper.toFinalizeOrderDto(orderService.finalizeOrder(id,orderFinalizeRequestDto));
     }
-*/
+
 
 
 }
