@@ -2,6 +2,8 @@ package org.example.ordermanagement.model;
 
 import jakarta.persistence.*;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Builder
@@ -11,6 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Valid
 @Table(name = "order_item")
 public class OrderItem {
 
@@ -23,8 +26,9 @@ public class OrderItem {
     @Builder.Default
     private int quantity=1;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "price_id")
+    @NotNull(message = "SHIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIT")
     private Price price;
 
     @ManyToOne

@@ -3,8 +3,6 @@ package org.example.ordermanagement.model;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 
 import java.time.LocalDateTime;
@@ -36,7 +34,7 @@ public class Order {
     @Column(name = "status")
     private Status status;
 
-    @Transient
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<OrderItem> orderItems;
 
     @ManyToOne

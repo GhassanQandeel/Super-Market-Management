@@ -2,7 +2,6 @@ package com.example.employeemanagement.service;
 
 import com.example.employeemanagement.exception.Code;
 import com.example.employeemanagement.exception.EmployeeNotFoundException;
-import com.example.employeemanagement.mapper.EmployeeMapper;
 import com.example.employeemanagement.model.Employee;
 import com.example.employeemanagement.projections.EmployeeProjections;
 import com.example.employeemanagement.repository.CustomEmployeeRepository;
@@ -30,8 +29,7 @@ public class EmployeeService {
     private EmployeeRepository employeeRepository;
     @Autowired
     private CustomEmployeeRepository customEmployeeRepository;
-    @Autowired
-    private EmployeeMapper employeeMapper;
+
 
 
     public Page<Employee> getAllEmployees(

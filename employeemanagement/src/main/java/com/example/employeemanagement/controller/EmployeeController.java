@@ -80,21 +80,26 @@ public class EmployeeController {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/*
+    /*
     @GetMapping("/role-count")
     public Integer getEmployeeRoleCount(@Valid @RequestParam("role") String role) {
         return employeeService.findNumberOfEmployeeForEachRole(role);
     }
+    */
 
-    *//* @GetMapping("/{age}")
+    /*
+    @GetMapping("/{age}")
     public List<EmployeeDTO> findEmployeeByAgeGreaterThan(@PathVariable Integer age) {
         return employeeMapper.toEmployeeDTO(employeeService.findEmployeeByAgeGreaterThan(age));
-    }*//*
+    }
+    */
 
+    /*
     @GetMapping("/role-id")
     public @ResponseBody List<Map<Long, Role>> findRoleForEveryEmployeeId() {
         return employeeService.findRoleForEveryEmployeeId();
-    }*/
+    }
+    */
 
 
 }

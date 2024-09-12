@@ -1,8 +1,8 @@
 package org.example.ordermanagement.service;
 
-import jakarta.persistence.EntityNotFoundException;
+
 import org.example.ordermanagement.exception.customer.CustomerNotFoundException;
-import org.example.ordermanagement.exception.customer.CustomerRequestNullException;
+
 import org.example.ordermanagement.exception.dto.Code;
 import org.example.ordermanagement.model.Customer;
 import org.example.ordermanagement.repository.CustomerRepository;
